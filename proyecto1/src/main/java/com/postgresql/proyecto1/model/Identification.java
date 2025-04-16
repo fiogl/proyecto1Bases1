@@ -1,4 +1,4 @@
-package com.postgresql.proyecto1.Classes;
+package com.postgresql.proyecto1.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
 
 @Data
 @Entity
