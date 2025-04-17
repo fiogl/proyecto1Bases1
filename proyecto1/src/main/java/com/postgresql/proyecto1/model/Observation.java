@@ -27,5 +27,8 @@ public class Observation {
     @NotNull
     private String place_observation;
 
+    @NotNull
+    private int taxon_id;
+
     private String notes;
 }

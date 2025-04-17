@@ -8,6 +8,8 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDate;
+
 @Data
 @Entity
 @Table(name = "identification")
@@ -25,4 +27,7 @@ public class Identification {
 
     @NotNull
     private int taxon_id;
+
+    @NotNull
+    private LocalDate date;
 }
