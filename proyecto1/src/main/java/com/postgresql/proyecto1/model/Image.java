@@ -1,4 +1,4 @@
-package com.postgresql.proyecto1.Classes;
+package com.postgresql.proyecto1.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,25 +10,25 @@ import jakarta.validation.constraints.NotNull;
 
 @Data
 @Entity
-@Table(name = "user")
+@Table(name = "image")
 
-public class User {
+public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_user;
+    private int id_image;
 
     @NotNull
-    private String name;
+    private String owner;
 
     @NotNull
-    private String last_name;
+    private int taxon_shown;
 
     @NotNull
-    private String country;
+    private int license_id;
 
     @NotNull
-    private String address;
+    private int user_publisher;
 
     @NotNull
-    private String email;
+    private String place_image;
 }

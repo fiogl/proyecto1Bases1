@@ -1,4 +1,4 @@
-package com.postgresql.proyecto1.Classes;
+package com.postgresql.proyecto1.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,25 +7,21 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
 
 @Data
 @Entity
-@Table(name = "observation")
-
-public class Observation {
+@Table(name = "taxon")
+public class Taxon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_observation;
+    private int id_taxon;
 
     @NotNull
-    private int user_id;
+    private int id_ancestor;
 
     @NotNull
-    private LocalDate taxon_shown;
+    private String scientific_name;
 
     @NotNull
-    private String place_observation;
-
-    private String notes;
+    private String common_name;
 }
