@@ -2,7 +2,6 @@ package com.postgresql.proyecto1;
 
 import com.postgresql.proyecto1.model.Observation;
 import com.postgresql.proyecto1.repo.ObservationRepo;
-import com.postgresql.proyecto1.repo.LicenseRepo;
 import com.postgresql.proyecto1.repo.TaxonRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
