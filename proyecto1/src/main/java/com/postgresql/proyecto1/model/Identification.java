@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -16,6 +17,9 @@ public class Identification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_identification;
+
+    @NotNull
+    private LocalDate date;
 
     @NotNull
     private int user_id;

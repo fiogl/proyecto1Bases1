@@ -22,6 +22,9 @@ public class Observation {
     private int user_id;
 
     @NotNull
+    private int taxon_id;
+
+    @NotNull
     private LocalDate taxon_shown;
 
     @NotNull
