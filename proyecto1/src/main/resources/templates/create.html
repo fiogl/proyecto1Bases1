@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Observación</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v6.0.0/js/all.js"></script>
+<style>
+    .hero.is-savb {
+    background: linear-gradient(135deg, #48c774 0%, #257a42 100%);
+    }
+</style>
+</head>
+<body>
+
+<section class="hero is-savb is-bold">
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <h1 class="title has-text-white">
+                SAVB CR
+            </h1>
+            <h2 class="subtitle has-text-white">
+                Sistema de Actualización y Visualización de la Biodiversidad en Costa Rica
+            </h2>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h1 class="title">New Observation</h1>
+
+        <!-- FORMULARIO PRINCIPAL -->
+        <form th:action="@{/create}" th:object="${observation}" method="post">
+
+            <!-- Vista previa -->
+            <div class="field" id="imagePreviewWrapper" style="display:none;">
+                <label class="label">Preview</label>
+                <figure class="image is-128x128">
+                    <img id="imagePreview" src="" alt="Prewiew">
+                </figure>
+            </div>
+
+            <!-- Botón para abrir modal de imagen -->
+            <div class="field">
+                <button type="button" class="button is-link" id="openImageModal">
+                    Upload Image
+                </button>
+            </div>
+
+            <!-- Taxón -->
+            <div class="field">
+                <label class="label">Taxon</label>
+                <div class="control">
+                    <div class="select">
+                        <select th:field="*{taxon}">
+                            <option th:each="taxon : ${taxon}"
+                                    th:value="${taxon.id_taxon}"
+                                    th:text="${taxon.scientific_name}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lugar -->
+            <div class="field">
+                <label class="label">Place</label>
+                <div class="control">
+                    <input class="input" type="text" th:field="*{place_observation}" placeholder="Latitude and longitude: 9.748917, -83.753428">
+                </div>
+            </div>
+
+            <!-- Fecha -->
+            <div class="field">
+                <label class="label">Date</label>
+                <div class="control">
+                    <input class="input" type="date" th:field="*{date}">
+                </div>
+            </div>
+
+            <!-- Notas -->
+            <div class="field">
+                <label class="label">Notes</label>
+                <div class="control">
+                    <textarea class="textarea" th:field="*{notes}" placeholder="Optional Coments"></textarea>
+                </div>
+            </div>
+
+            <!-- Campos ocultos que serán llenados desde el modal (ventana emergente) -->
+            <input type="hidden" th:field="*{image.url}" id="hiddenImageUrl">
+            <input type="hidden" th:field="*{image.owner}" id="hiddenImageOwner">
+            <input type="hidden" th:field="*{image.place_image}" id="hiddenImagePlace">
+            <input type="hidden" th:field="*{image.license.id_license}" id="hiddenImageLicense">
+            <input type="hidden" th:field="*{image.taxon.id_taxon}" id="hiddenImageTaxon">
+
+            <!-- Save -->
+            <div class="field mt-4">
+                <button class="button is-success is-pulled-right button is-medium" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal" id="imageModal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Image Data</p>
+            <button class="delete" aria-label="close" id="closeImageModal"></button>
+        </header>
+        <section class="modal-card-body">
+            <!-- URL -->
+            <div class="field">
+                <label class="label">Image URL</label>
+                <div class="control">
+                    <input id="modalImageUrl" class="input" type="text" placeholder="https://...">
+                </div>
+            </div>
+
+            <!-- Dueño -->
+            <div class="field">
+                <label class="label">Owner</label>
+                <div class="control">
+                    <input id="modalImageOwner" class="input" type="text" placeholder="Ej: Ana Pérez">
+                </div>
+            </div>
+
+            <!-- Lugar imagen -->
+            <div class="field">
+                <label class="label">Place of the picture</label>
+                <div class="control">
+                    <input id="modalImagePlace" class="input" type="text" placeholder="Latitude and longitude: 9.748917, -83.753428">
+                </div>
+            </div>
+
+            <!-- Taxón mostrado -->
+            <div class="field">
+                <label class="label">Taxon shown</label>
+                <div class="control">
+                    <div class="select">
+                        <select id="modalImageTaxon">
+                            <option value="" disabled selected>Select taxon</option>
+                            <option th:each="taxon : ${taxon}" th:value="${taxon.id_taxon}" th:text="${taxon.scientific_name}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Licencia -->
+            <div class="field">
+                <label class="label">License</label>
+                <div class="control">
+                    <div class="select">
+                        <select id="modalImageLicense">
+                            <option value="" disabled selected>Select license</option>
+                            <option th:each="lic : ${license}" th:value="${lic.id_license}" th:text="${lic.name}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-success" id="saveImageData">Save</button>
+        </footer>
+    </div>
+</div>
+
+<script>
+    const modal = document.getElementById('imageModal');
+    const openModalBtn = document.getElementById('openImageModal');
+    const closeModalBtn = document.getElementById('closeImageModal');
+    const saveImageDataBtn = document.getElementById('saveImageData');
+
+    openModalBtn.addEventListener('click', () => {
+        modal.classList.add('is-active');
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+        modal.classList.remove('is-active');
+    });
+
+    saveImageDataBtn.addEventListener('click', () => {
+        // Copiar datos del modal al formulario principal
+        document.getElementById('hiddenImageUrl').value = document.getElementById('modalImageUrl').value;
+        document.getElementById('hiddenImageOwner').value = document.getElementById('modalImageOwner').value;
+        document.getElementById('hiddenImagePlace').value = document.getElementById('modalImagePlace').value;
+        document.getElementById('hiddenImageLicense').value = document.getElementById('modalImageLicense').value;
+        document.getElementById('hiddenImageTaxon').value = document.getElementById('modalImageTaxon').value;
+
+        // Mostrar preview
+        const previewWrapper = document.getElementById('imagePreviewWrapper');
+        const previewImage = document.getElementById('imagePreview');
+        const url = document.getElementById('modalImageUrl').value;
+        if (url) {
+            previewImage.src = url;
+            previewWrapper.style.display = 'block';
+        }
+
+        modal.classList.remove('is-active');
+    });
+</script>
+</body>
+</html>

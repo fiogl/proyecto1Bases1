@@ -16,6 +16,7 @@ public class Taxon {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_taxon;
 
+    //Puede ser que este sea un many to one
     @NotNull
     private int id_ancestor;
 

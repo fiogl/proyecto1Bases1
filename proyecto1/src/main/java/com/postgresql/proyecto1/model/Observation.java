@@ -1,10 +1,6 @@
 package com.postgresql.proyecto1.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -19,19 +15,25 @@ public class Observation {
     private int id_observation;
 
     @NotNull
-    private int user_id;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @NotNull
-    private int taxon_id;
+    @ManyToOne
+    @JoinColumn(name = "taxon_id")
+    private Taxon taxon;
 
     @NotNull
-    private LocalDate taxon_shown;
+    @OneToOne (cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
+    private Image image;
+
+    @NotNull
+    private LocalDate date;
 
     @NotNull
     private String place_observation;
-
-    @NotNull
-    private int taxon_id;
 
     private String notes;
 }

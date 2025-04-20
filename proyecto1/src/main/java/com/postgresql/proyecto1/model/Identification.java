@@ -1,14 +1,8 @@
 package com.postgresql.proyecto1.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
-
 import java.time.LocalDate;
 
 @Data
@@ -21,16 +15,19 @@ public class Identification {
     private int id_identification;
 
     @NotNull
-    private LocalDate date;
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
 
     @NotNull
-    private int user_id;
+    @ManyToOne
+    @JoinColumn(name="observation_id")
+    private Observation observation;
 
     @NotNull
-    private int observation_id;
-
-    @NotNull
-    private int taxon_id;
+    @ManyToOne
+    @JoinColumn(name="taxon_id")
+    private Taxon taxon;
 
     @NotNull
     private LocalDate date;

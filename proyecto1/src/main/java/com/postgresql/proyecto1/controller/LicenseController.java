@@ -1,4 +1,4 @@
-package com.postgresql.proyecto1;
+package com.postgresql.proyecto1.controller;
 
 import com.postgresql.proyecto1.model.License;
 import com.postgresql.proyecto1.repo.LicenseRepo;

@@ -1,4 +1,4 @@
-package com.postgresql.proyecto1;
+package com.postgresql.proyecto1.controller;
 
 import com.postgresql.proyecto1.model.Image;
 import com.postgresql.proyecto1.repo.ImageRepo;
@@ -19,11 +19,11 @@ public class ImageController {
 
     @PostMapping("/addImage")
     public void addImage(@RequestBody Image image) {
-        if (!licenseRepo.existsById(image.getLicense_id())) {
+        if (image.getLicense() == null || !taxonRepo.existsById(image.getLicense().getId_license())) {
             throw new IllegalArgumentException("La licencia no existe.");
         }
 
-        if (!taxonRepo.existsById(image.getTaxon_shown())) {
+        if (image.getTaxon() == null || !taxonRepo.existsById(image.getTaxon().getId_taxon())) {
             throw new IllegalArgumentException("El taxon no existe.");
         }
 

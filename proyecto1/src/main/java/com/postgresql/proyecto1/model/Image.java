@@ -1,10 +1,6 @@
 package com.postgresql.proyecto1.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import jakarta.validation.constraints.NotNull;
 
@@ -21,14 +17,23 @@ public class Image {
     private String owner;
 
     @NotNull
-    private int taxon_shown;
+    @ManyToOne
+    @JoinColumn(name="taxon_shown")
+    private Taxon taxon;
 
     @NotNull
-    private int license_id;
+    @ManyToOne
+    @JoinColumn(name="license_id")
+    private License license;
 
     @NotNull
-    private int user_publisher;
+    @ManyToOne
+    @JoinColumn(name="user_publisher")
+    private User user;
 
     @NotNull
     private String place_image;
+
+    @NotNull
+    private String url;
 }
