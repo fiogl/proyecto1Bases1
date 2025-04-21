@@ -92,7 +92,7 @@
         <div class="box scroll-container">
             <!-- Estado vacío (se muestra cuando no hay observaciones) -->
             <div class="is-flex is-flex-direction-column is-justify-content-center is-align-items-center has-text-centered"
-                 style="height: 100%;" th:if="${observations.empty}">
+                 style="height: 100%;" th:if="${#lists.isEmpty(observations)}">
     <span class="icon is-large has-text-grey-light">
         <i class="fas fa-dove fa-3x"></i>
     </span>
