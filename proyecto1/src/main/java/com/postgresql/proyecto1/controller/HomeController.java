@@ -1,6 +1,5 @@
 package com.postgresql.proyecto1.controller;
 
-import com.postgresql.proyecto1.model.Image;
 import com.postgresql.proyecto1.model.Observation;
 import com.postgresql.proyecto1.model.User;
 import com.postgresql.proyecto1.repo.ObservationRepo;
