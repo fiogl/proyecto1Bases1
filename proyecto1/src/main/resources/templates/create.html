@@ -64,17 +64,17 @@
 
             <!-- Latitud -->
             <div class="field">
-                <label class="label">Place</label>
+                <label class="label">Latitude</label>
                 <div class="control">
-                    <input class="input" type="text" th:field="*{latitude}" placeholder="Latitude: 9.748917">
+                    <input class="input" type="number" th:field="*{latitude}" placeholder="Latitude: 9.748917" step="any" required>
                 </div>
             </div>
 
             <!-- Latitud -->
             <div class="field">
-                <label class="label">Place</label>
+                <label class="label">Longitude</label>
                 <div class="control">
-                    <input class="input" type="text" th:field="*{longitude}" placeholder="Longitude: -83.753428">
+                    <input class="input" type="number" th:field="*{longitude}" placeholder="Longitude: -83.753428" step="any" required>
                 </div>
             </div>
 
@@ -97,7 +97,8 @@
             <!-- Campos ocultos que serán llenados desde el modal (ventana emergente) -->
             <input type="hidden" th:field="*{image.url}" id="hiddenImageUrl">
             <input type="hidden" th:field="*{image.owner}" id="hiddenImageOwner">
-            <input type="hidden" th:field="*{image.place_image}" id="hiddenImagePlace">
+            <input type="hidden" th:field="*{image.latitude}" id="hiddenImageLatitude">
+            <input type="hidden" th:field="*{image.longitude}" id="hiddenImageLongitude">
             <input type="hidden" th:field="*{image.license.id_license}" id="hiddenImageLicense">
             <input type="hidden" th:field="*{image.taxon.id_taxon}" id="hiddenImageTaxon">
 
@@ -134,11 +135,19 @@
                 </div>
             </div>
 
-            <!-- Lugar imagen -->
+            <!-- Latitud imagen -->
             <div class="field">
-                <label class="label">Place of the picture</label>
+                <label class="label">Latitude of the picture</label>
                 <div class="control">
-                    <input id="modalImagePlace" class="input" type="text" placeholder="Latitude and longitude: 9.748917, -83.753428">
+                    <input id="modalImageLatitude" class="input" type="number" placeholder="Latitude: 9.748917" step="any" required>
+                </div>
+            </div>
+
+            <!-- Longitud imagen -->
+            <div class="field">
+                <label class="label">Longitude of the picture</label>
+                <div class="control">
+                    <input id="modalImageLongitude" class="input" type="number" placeholder="Longitude: -83.753428" step="any" required>
                 </div>
             </div>
 
@@ -192,7 +201,8 @@
         // Copiar datos del modal al formulario principal
         document.getElementById('hiddenImageUrl').value = document.getElementById('modalImageUrl').value;
         document.getElementById('hiddenImageOwner').value = document.getElementById('modalImageOwner').value;
-        document.getElementById('hiddenImagePlace').value = document.getElementById('modalImagePlace').value;
+        document.getElementById('hiddenImageLatitude').value = document.getElementById('modalImageLatitude').value;
+        document.getElementById('hiddenImageLongitude').value = document.getElementById('modalImageLongitude').value;
         document.getElementById('hiddenImageLicense').value = document.getElementById('modalImageLicense').value;
         document.getElementById('hiddenImageTaxon').value = document.getElementById('modalImageTaxon').value;
 

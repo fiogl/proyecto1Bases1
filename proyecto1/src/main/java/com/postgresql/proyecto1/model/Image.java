@@ -32,7 +32,10 @@ public class Image {
     private User user;
 
     @NotNull
-    private String place_image;
+    private double latitude;
+
+    @NotNull
+    private double longitude;
 
     @NotNull
     private String url;
