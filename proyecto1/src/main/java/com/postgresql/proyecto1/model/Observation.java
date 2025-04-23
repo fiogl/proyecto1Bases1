@@ -33,7 +33,10 @@ public class Observation {
     private LocalDate date;
 
     @NotNull
-    private String place_observation;
+    private double latitude;
+
+    @NotNull
+    private double longitude;
 
     private String notes;
 }
