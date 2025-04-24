@@ -25,6 +25,12 @@ public class HomeController {
         return "home";
     }
 
+    @GetMapping("/taxons_consults")
+    public String taxons(Model model) {
+        model.addAttribute("taxons", observationRepo.findAll());
+        return "taxons_consults";
+    }
+
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         Observation obs = new Observation();
