@@ -76,7 +76,7 @@
                     Observations
             </span>
             <div class="buttons">
-                <a href="/create" class="button is-primary">
+                <a href="create.html" class="button is-primary">
                     <span class="icon"><i class="fas fa-plus"></i></span>
                     <span>Create</span>
                 </a>
@@ -105,13 +105,18 @@
                     <a th:href="@{/detalle/{id}(id=${obs.user})}">
                         <span th:text="'Observationn #' + ${obs.user}"></span>
                     </a>
+
+                    <!-- Para ver la imagen, si no funciona borralo sin compromiso :P -->
+                    <div class="observation-image">
+                        <img th:src="${obs.image.url}" alt="Imagen de la observación" style="max-width: 100%; height: auto;">
+                    </div>
                     <button class="delete is-small delete-btn" th:data-id="${obs.user}"></button>
                 </div>
             </div>
         </div>
 
         <!-- Botón de consultas -->
-        <a href="/consults" class="button is-info is-fullwidth">
+        <a href="taxons_consults.html" class="button is-info is-fullwidth">
             <span class="icon"><i class="fas fa-search"></i></span>
             <span>Make consults</span>
         </a>

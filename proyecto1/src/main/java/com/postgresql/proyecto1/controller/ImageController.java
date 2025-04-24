@@ -17,18 +17,18 @@ public class ImageController {
     LicenseRepo licenseRepo;
     TaxonRepo taxonRepo;
 
-    @PostMapping("/addImage")
-    public void addImage(@RequestBody Image image) {
-        if (image.getLicense() == null || !taxonRepo.existsById(image.getLicense().getId_license())) {
-            throw new IllegalArgumentException("La licencia no existe.");
-        }
-
-        if (image.getTaxon() == null || !taxonRepo.existsById(image.getTaxon().getId_taxon())) {
-            throw new IllegalArgumentException("El taxon no existe.");
-        }
-
-
-
-        imageRepo.save(image);
-    }
+//    @PostMapping("/addImage")
+//    public void addImage(@RequestBody Image image) {
+//        if (image.getLicense() == null || !taxonRepo.existsById(image.getLicense().getId_license())) {
+//            throw new IllegalArgumentException("La licencia no existe.");
+//        }
+//
+//        if (image.getTaxon() == null || !taxonRepo.existsById(image.getTaxon().getId_taxon())) {
+//            throw new IllegalArgumentException("El taxon no existe.");
+//        }
+//
+//
+//
+//        imageRepo.save(image);
+//    }
 }
