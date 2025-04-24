@@ -27,7 +27,7 @@ public class HomeController {
 
     @GetMapping("/taxons_consults")
     public String taxons(Model model) {
-        model.addAttribute("taxons", observationRepo.findAll());
+        model.addAttribute("observations", observationRepo.findAll());
         return "taxons_consults";
     }
 
