@@ -9,5 +9,5 @@ import java.util.List;
 @RepositoryRestResource
 public interface TaxonRepo extends JpaRepository<Taxon, Integer> {
     // Para buscar si otros taxones decienden del actual
-    List<Taxon> findByAntecesorId(int antecesorId);
+    List<Taxon> findByAncestor(Taxon ancestor);
 }

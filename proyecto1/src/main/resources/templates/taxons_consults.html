@@ -109,7 +109,7 @@
                     </p>
                     <p>
                         <strong>Especie:</strong>
-                        <span th:text="${#lists.size(taxonRepo.findByAntecesorId(obs.taxon.id_taxon)) == 0 ? obs.taxon.scientific_name : 'Not Found'}"></span>
+                        <span th:text="${#lists.size(taxonRepo.findByAntecesorId(obs.taxon.ancestor)) == 0 ? obs.taxon.scientific_name : 'Not Found'}"></span>
                     </p>
                 </div>
 

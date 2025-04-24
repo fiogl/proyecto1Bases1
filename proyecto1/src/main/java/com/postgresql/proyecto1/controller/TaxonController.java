@@ -16,8 +16,8 @@ public class TaxonController {
     TaxonRepo repo;
 
     @GetMapping("/{id}/hijos")
-    public List<Taxon> getChildren(@PathVariable int id) {
-        return repo.findByAntecesorId(id);
+    public List<Taxon> getChildren(@PathVariable Taxon ancestor) {
+        return repo.findByAncestor(ancestor);
     }
 
 //    @PostMapping("/addTaxon")
