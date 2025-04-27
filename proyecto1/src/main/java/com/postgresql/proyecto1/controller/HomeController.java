@@ -40,6 +40,7 @@ public class HomeController {
                 );
             }
         }
+        model.addAttribute("reino", 'x'); // prueba
         model.addAttribute("observations", observations);
         return "taxons_consults";
     }
