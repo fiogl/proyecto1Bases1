@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -25,7 +27,7 @@ public class Observation {
     private Taxon taxon;
 
     @NotNull
-    @OneToOne (cascade = CascadeType.ALL)
+    @OneToOne (cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "image_id")
     private Image image;
 
@@ -39,4 +41,11 @@ public class Observation {
     private double longitude;
 
     private String notes;
+
+    // Si se elimina una observación, también se eliminan sus identificaciones
+    @OneToMany(mappedBy = "observation",
+               cascade = CascadeType.ALL, // Propaga operaciones
+               orphanRemoval = true       // Elimina identificaciones "huérfanas"
+    )
+    private List<Identification> identifications = new ArrayList<>();
 }

@@ -20,7 +20,7 @@ public class Identification {
     private User user;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="observation_id")
     private Observation observation;
 

@@ -1,7 +1,6 @@
 package com.postgresql.proyecto1.controller;
 
 import com.postgresql.proyecto1.model.Observation;
-import com.postgresql.proyecto1.model.Taxon;
 import com.postgresql.proyecto1.model.User;
 import com.postgresql.proyecto1.repo.ObservationRepo;
 import com.postgresql.proyecto1.repo.UserRepo;
@@ -28,6 +27,13 @@ public class HomeController {
         return "home";
     }
 
+    @GetMapping("/observations")
+    public String listObservations(Model model) {
+        List<Observation> observations = observationRepo.findAllWithTaxonAndUser();
+        model.addAttribute("observations", observations);
+        return "observations";
+    }
+
     @GetMapping("/taxons_consults")
     public String getTaxonConsultPage(Model model) {
         List<Observation> observations = observationRepo.findAll();
@@ -45,6 +51,18 @@ public class HomeController {
         return "taxons_consults";
     }
 
+    @GetMapping("/observation_detail/{id}")
+    public String getObservationDetails(@PathVariable Integer id, Model model) {
+        Observation observation = observationRepo.findByIdWithDetails(id);
+        model.addAttribute("observation", observation);
+        return "observation_detail";
+    }
+
+    @GetMapping("/my_observations")
+    public String myObservations(Model model) {
+        model.addAttribute("observations", observationRepo.findAll());
+        return "my_observations";
+    }
 
     @GetMapping("/create")
     public String showCreateForm(Model model) {
@@ -69,7 +87,7 @@ public class HomeController {
         return "redirect:/";
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete_observation/{id}")
     @ResponseBody
     public String delete(@PathVariable Integer id) {
         observationRepo.deleteById(id);

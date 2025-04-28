@@ -13,7 +13,7 @@ public class Taxon {
     private int id_taxon;
 
     @ManyToOne
-    @JoinColumn(name = "taxon_id")
+    @JoinColumn(name = "id_ancestor")
     private Taxon ancestor;
 
     @NotNull

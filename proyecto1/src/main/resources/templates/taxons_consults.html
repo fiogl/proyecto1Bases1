@@ -109,14 +109,14 @@
                     </p>
                     <p>
                         <strong>Especie:</strong>
-                        <span th:text="${#lists.size(taxonRepo.findByAntecesorId(obs.taxon.ancestor)) == 0 ? obs.taxon.scientific_name : 'Not Found'}"></span>
+                        <span th:text="${#lists.size(taxonRepo.findByAncestor(obs.taxon.ancestor)) == 0 ? obs.taxon.scientific_name : 'Not Found'}"></span>
                     </p>
                 </div>
 
                 <!-- Información de la observación -->
                 <div class="observation-details">
                     <p><strong>Fecha de Observación:</strong> <span th:text="${obs.date}"></span></p>
-                    <p><strong>Sitio de Observación:</strong> (<span th:text="${obs.latitude}"></span>, <span th:text="${obs.longitud}"></span>)
+                    <p><strong>Sitio de Observación:</strong> (<span th:text="${obs.latitude}"></span>, <span th:text="${obs.longitude}"></span>)
                     <p><strong>Nombre del Usuario:</strong> <span th:text="${obs.user}"></span></p>
                 </div>
 

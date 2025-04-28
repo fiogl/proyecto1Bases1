@@ -11,6 +11,8 @@
     }
 </style>
 </head>
+
+
 <body>
 
 <section class="hero is-savb is-bold">
@@ -54,27 +56,34 @@
                 <div class="control">
                     <div class="select">
                         <select th:field="*{taxon}">
-                            <option th:each="taxon : ${taxon}"
-                                    th:value="${taxon.id_taxon}"
-                                    th:text="${taxon.scientific_name}"></option>
+                            <option th:each="taxons : ${taxon}"
+                                    th:value="${taxons.id_taxon}"
+                                    th:text="${taxons.scientific_name}"></option>
                         </select>
                     </div>
                 </div>
             </div>
 
-            <!-- Latitud -->
-            <div class="field">
-                <label class="label">Latitude</label>
-                <div class="control">
-                    <input class="input" type="number" th:field="*{latitude}" placeholder="Latitude: 9.748917" step="any" required>
+            <!-- Línea para coordenadas -->
+            <div class="columns">
+                <div class="column is-half">
+                    <!-- Latitud -->
+                    <div class="field">
+                        <label class="label">Latitude</label>
+                        <div class="control">
+                            <input class="input" type="number" th:field="*{latitude}" placeholder="Latitude: 9.748917" step="any" required>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Latitud -->
-            <div class="field">
-                <label class="label">Longitude</label>
-                <div class="control">
-                    <input class="input" type="number" th:field="*{longitude}" placeholder="Longitude: -83.753428" step="any" required>
+                <div class="column is-half">
+                    <!-- Longitud -->
+                    <div class="field">
+                        <label class="label">Longitude</label>
+                        <div class="control">
+                            <input class="input" type="number" th:field="*{longitude}" placeholder="Longitude: -83.753428" step="any" required>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -135,19 +144,26 @@
                 </div>
             </div>
 
-            <!-- Latitud imagen -->
-            <div class="field">
-                <label class="label">Latitude of the picture</label>
-                <div class="control">
-                    <input id="modalImageLatitude" class="input" type="number" placeholder="Latitude: 9.748917" step="any" required>
+            <!-- Línea para coordenadas -->
+            <div class="columns">
+                <div class="column is-half">
+                    <!-- Latitud imagen -->
+                    <div class="field">
+                        <label class="label">Latitude</label>
+                        <div class="control">
+                            <input id="modalImageLatitude" class="input" type="number" placeholder="Latitude: 9.748917" step="any" required>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Longitud imagen -->
-            <div class="field">
-                <label class="label">Longitude of the picture</label>
-                <div class="control">
-                    <input id="modalImageLongitude" class="input" type="number" placeholder="Longitude: -83.753428" step="any" required>
+                <div class="column is-half">
+                    <!-- Longitud imagen -->
+                    <div class="field">
+                        <label class="label">Longitude</label>
+                        <div class="control">
+                            <input id="modalImageLongitude" class="input" type="number" placeholder="Longitude: -83.753428" step="any" required>
+                        </div>
+                    </div>
                 </div>
             </div>
 
