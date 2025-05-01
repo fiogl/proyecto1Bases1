@@ -11,8 +11,8 @@
     <style>
     /* Estilos personalizados */
     .scroll-container {
-    height: 300px;
-    max-height: 400px;
+    height: 400px;
+    max-height: 700px;
     overflow-y: auto;
     border: 1px solid #dbdbdb;
     border-radius: 6px;
@@ -57,7 +57,17 @@
 <!-- Hero Section (Cabecera) -->
 <section class="hero is-savb is-bold">
     <div class="hero-body">
-        <div class="container has-text-centered">
+
+        <div class="container is-flex is-justify-content-space-between is-align-items-center">
+        <!-- Botón de atrás -->
+        <a href="/" class="button is-white is-rounded ">
+                <span class="icon">
+                    <i class="fas fa-arrow-left" style="color: #48C774FF;"></i>
+                </span>
+            <span style="color: #48C774;">Back</span>
+        </a>
+
+        <div class="has-text-centered" style="flex-grow: 1;">
             <h1 class="title has-text-white">
                 SAVB CR
             </h1>
@@ -65,6 +75,9 @@
                 Sistema de Actualización y Visualización de la Biodiversidad en Costa Rica
             </h2>
         </div>
+            <div style="width: 94px;"></div>
+        </div>
+
     </div>
 </section>
 
