@@ -17,4 +17,7 @@ public interface ObservationRepo extends JpaRepository<Observation, Integer> {
 
     @Query("SELECT o FROM Observation o JOIN FETCH o.taxon JOIN FETCH o.user JOIN FETCH o.image WHERE o.id_observation = :id")
     Observation findByIdWithDetails(@Param("id") Integer id);
+
+    @Query("SELECT o FROM Observation o JOIN FETCH o.taxon")
+    List<Observation> findAllWithTaxon();
 }

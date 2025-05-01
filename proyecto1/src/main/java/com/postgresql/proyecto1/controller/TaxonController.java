@@ -15,11 +15,6 @@ public class TaxonController {
     @Autowired
     TaxonRepo repo;
 
-    @GetMapping("/{id}/hijos")
-    public List<Taxon> getChildren(@PathVariable Taxon ancestor) {
-        return repo.findByAncestor(ancestor);
-    }
-
 //    @PostMapping("/addTaxon")
 //    //Verifica que el antecesor exista o que sea cero para crearlo
 //    public void addTaxon(@RequestBody Taxon taxon) {

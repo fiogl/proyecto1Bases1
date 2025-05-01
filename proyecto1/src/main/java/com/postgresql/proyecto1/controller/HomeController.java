@@ -1,17 +1,22 @@
 package com.postgresql.proyecto1.controller;
 
+import com.postgresql.proyecto1.dto.ObservationDTO;
 import com.postgresql.proyecto1.model.Observation;
+import com.postgresql.proyecto1.model.Taxon;
 import com.postgresql.proyecto1.model.User;
 import com.postgresql.proyecto1.repo.ObservationRepo;
 import com.postgresql.proyecto1.repo.UserRepo;
 import com.postgresql.proyecto1.repo.TaxonRepo;
 import com.postgresql.proyecto1.repo.LicenseRepo;
+import com.postgresql.proyecto1.service.TaxonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,6 +25,7 @@ public class HomeController {
     private final TaxonRepo taxonRepo;
     private final LicenseRepo licenseRepo;
     private final UserRepo userRepo;
+    private final TaxonService taxonService;
 
     @GetMapping("/")
     public String home(Model model) {
@@ -34,22 +40,47 @@ public class HomeController {
         return "observations";
     }
 
+    @GetMapping("/general_consults")
+    public String listGeneral(Model model) {
+        List<Observation> observations = observationRepo.findAll();
+        model.addAttribute("observations", observations);
+        return "general_consults";
+    }
+
     @GetMapping("/taxons_consults")
     public String getTaxonConsultPage(Model model) {
         List<Observation> observations = observationRepo.findAll();
-        for (Observation obs : observations) {
-            if (obs.getTaxon() != null && obs.getTaxon().getAncestor() != null) {
-                obs.getTaxon().setScientific_name(
-                        taxonRepo.findByAncestor(obs.getTaxon().getAncestor()).isEmpty()
-                                ? obs.getTaxon().getScientific_name()
-                                : "Not Found"
-                );
-            }
+        List<ObservationDTO> observationDTOs = new ArrayList<>();
+
+        for (Observation observation : observations) {
+            Taxon taxon = observation.getTaxon();
+            Taxon kingdom = taxonService.findKingdom(taxon.getId_taxon());
+            boolean species = taxonService.species(taxon.getId_taxon());
+
+            // Crea un DTO para cada observación
+            ObservationDTO observationDTO = new ObservationDTO(observation, kingdom, species);
+            observationDTOs.add(observationDTO);
         }
-        model.addAttribute("reino", 'x'); // prueba
-        model.addAttribute("observations", observations);
+
+        model.addAttribute("observations", observationDTOs);
         return "taxons_consults";
     }
+
+//    @GetMapping("/taxons_consults/{id}")
+//    public String getTaxon(@PathVariable Integer id, Model model) {
+//        Taxon kingdom = taxonService.findKingdom(id);
+//        boolean isSpecies = taxonService.species(id);
+//
+//        model.addAttribute("kingdom", kingdom);
+//
+//        if (isSpecies) {
+//            Taxon taxon = taxonService.findTaxonById_taxon(id);
+//            model.addAttribute("species", taxon.getScientific_name());
+//        } else {
+//            model.addAttribute("species", "No disponible");
+//        }
+//        return "taxons_consults";
+//    }
 
     @GetMapping("/observation_detail/{id}")
     public String getObservationDetails(@PathVariable Integer id, Model model) {
