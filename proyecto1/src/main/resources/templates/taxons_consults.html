@@ -76,9 +76,12 @@
             <span class="is-size-2 is-italic has-text-weight-bold has-text-success">
                 Taxons
             </span>
-                <a href="general_consults.html" class="has-text-info is-size-2 is-italic has-text-weight-bold" style="margin-left: auto;">
-                    General
+            <div class="buttons">
+                <a href="/general_consults" class="button is-primary">
+                    <span class="icon"><i class="fas fa-plus"></i></span>
+                    <span>General</span>
                 </a>
+            </div>
         </div>
 
         <!-- Lista de observaciones (scroll fijo) -->
@@ -93,36 +96,32 @@
             </div>
 
             <!-- Lista de observaciones (se muestra cuando hay datos) -->
-            <div th:each="obs : ${observations}" class="observation-item">
+            <div th:each="observationDTO : ${observations}" class="observation-item">
                 <div class="is-flex is-justify-content-space-between">
-                    <a th:href="@{/detalle/{id}(id=${obs.user})}">
-                        <span th:text="'Observation #' + ${obs.user}"></span>
-                    </a>
-                    <button class="delete is-small delete-btn" th:data-id="${obs.user}"></button>
                 </div>
 
                 <!-- Información del taxón -->
                 <div class="taxon-info">
                     <p>
                         <strong>Reino:</strong>
-                        <span th:text="${reino}">Reino</span>
+                        <span th:text="${observationDTO.kingdom.scientific_name}">Reino</span>
                     </p>
                     <p>
                         <strong>Especie:</strong>
-                        <span th:text="${#lists.size(taxonRepo.findByAncestor(obs.taxon.ancestor)) == 0 ? obs.taxon.scientific_name : 'Not Found'}"></span>
+                        <span th:text="${observationDTO.isSpecies ? observationDTO.observation.taxon.scientific_name : 'No disponible'}"></span>
                     </p>
                 </div>
 
                 <!-- Información de la observación -->
                 <div class="observation-details">
-                    <p><strong>Fecha de Observación:</strong> <span th:text="${obs.date}"></span></p>
-                    <p><strong>Sitio de Observación:</strong> (<span th:text="${obs.latitude}"></span>, <span th:text="${obs.longitude}"></span>)
-                    <p><strong>Nombre del Usuario:</strong> <span th:text="${obs.user}"></span></p>
+                    <p><strong>Fecha de Observación:</strong> <span th:text="${observationDTO.observation.date}"></span></p>
+                    <p><strong>Sitio de Observación:</strong> (<span th:text="${observationDTO.observation.latitude}"></span>, <span th:text="${observationDTO.observation.longitude}"></span>)
+                    <p><strong>Nombre del Usuario:</strong> <span th:text="${observationDTO.observation.user.name}"></span></p>
                 </div>
 
                 <!-- Mostrar imagen -->
                 <div class="observation-image">
-                    <img th:src="${obs.image.url}" alt="Imagen de la observación" style="max-width: 100%; height: auto;">
+                    <img th:src="${observationDTO.observation.image.url}" alt="Imagen de la observación" style="max-width: 180px; height: auto; border-radius: 4px;">
                 </div>
             </div>
         </div>

@@ -41,9 +41,8 @@ public class HomeController {
     }
 
     @GetMapping("/general_consults")
-    public String listGeneral(Model model) {
-        List<Observation> observations = observationRepo.findAll();
-        model.addAttribute("observations", observations);
+    public String getGeneralConsultPage(Model model) {
+        model.addAttribute("observations", observationRepo.findAll());
         return "general_consults";
     }
 
@@ -57,7 +56,6 @@ public class HomeController {
             Taxon kingdom = taxonService.findKingdom(taxon.getId_taxon());
             boolean species = taxonService.species(taxon.getId_taxon());
 
-            // Crea un DTO para cada observación
             ObservationDTO observationDTO = new ObservationDTO(observation, kingdom, species);
             observationDTOs.add(observationDTO);
         }
