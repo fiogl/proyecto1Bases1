@@ -46,6 +46,19 @@ public class ObservationController {
         return "observacion/vista";
     }
 
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable int id, Model model) {
+        Observation observation = observationRepo.findById(id).orElse(null);
+        model.addAttribute("observation", observation);
+        return "observations/edit";
+    }
+
+    @PostMapping("/update")
+    public String updateObservation(@ModelAttribute Observation observation) {
+        observationRepo.save(observation); // Guarda o actualiza
+        return "redirect:/observations/list";
+    }
+
 //    @PostMapping("/addObservation")
 //    public void addObservation(@RequestBody Observation observation) {
 //        if (observation.getTaxon() == null || !taxonRepo.existsById(observation.getTaxon().getId_taxon())) {

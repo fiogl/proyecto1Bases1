@@ -1,19 +1,15 @@
 package com.postgresql.proyecto1.controller;
 
 import com.postgresql.proyecto1.dto.ObservationDTO;
-import com.postgresql.proyecto1.model.Observation;
-import com.postgresql.proyecto1.model.Taxon;
-import com.postgresql.proyecto1.model.User;
-import com.postgresql.proyecto1.repo.ObservationRepo;
-import com.postgresql.proyecto1.repo.UserRepo;
-import com.postgresql.proyecto1.repo.TaxonRepo;
-import com.postgresql.proyecto1.repo.LicenseRepo;
+import com.postgresql.proyecto1.model.*;
+import com.postgresql.proyecto1.repo.*;
 import com.postgresql.proyecto1.service.TaxonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +22,8 @@ public class HomeController {
     private final LicenseRepo licenseRepo;
     private final UserRepo userRepo;
     private final TaxonService taxonService;
+    private final ImageRepo imageRepo;
+    private final IdentificationRepo identificationRepo;
 
     @GetMapping("/")
     public String home(Model model) {
@@ -84,7 +82,88 @@ public class HomeController {
     public String getObservationDetails(@PathVariable Integer id, Model model) {
         Observation observation = observationRepo.findByIdWithDetails(id);
         model.addAttribute("observation", observation);
+        model.addAttribute("taxon", taxonRepo.findAll());
+        model.addAttribute("licenses", licenseRepo.findAll());
         return "observation_detail";
+    }
+
+
+    @PostMapping("/observations/update")
+    public String updateObservation(@RequestParam int id,
+                                    @RequestParam int taxon_id,
+                                    @RequestParam String date,
+                                    @RequestParam double latitude,
+                                    @RequestParam double longitude,
+                                    @RequestParam String notes,
+                                    @RequestParam String imageUrl,
+                                    @RequestParam String imageOwner,
+                                    @RequestParam double imageLatitude,
+                                    @RequestParam double imageLongitude,
+                                    @RequestParam int imageTaxon,
+                                    @RequestParam int imageLicense) {
+
+        Observation observation = observationRepo.findByIdWithDetails(id);
+
+        // Setea al user manual
+        User user = userRepo.findByEmail("florita2901@gmail.com");
+        observation.setUser(user);
+
+        // Actualizar datos
+        observation.setDate(LocalDate.parse(date));
+        observation.setLatitude(latitude);
+        observation.setLongitude(longitude);
+        observation.setNotes(notes);
+
+        // Actualizar taxón
+        Taxon taxon = taxonRepo.findById(taxon_id).orElseThrow();
+        observation.setTaxon(taxon);
+
+        // Actualizar imagen
+        Image image = observation.getImage();
+        image.setUrl(imageUrl);
+        image.setOwner(imageOwner);
+        image.setLatitude(imageLatitude);
+        image.setLongitude(imageLongitude);
+
+        Taxon imgTaxon = taxonRepo.findById(imageTaxon).orElseThrow();
+        image.setTaxon(imgTaxon);
+
+        License license = licenseRepo.findById(imageLicense).orElseThrow();
+        image.setLicense(license);
+
+        imageRepo.save(image);
+        observationRepo.save(observation);
+
+        return "redirect:/observation_detail/" + id;
+    }
+
+    @PostMapping("/identifications/create")
+    public String createIdentification(@RequestParam Integer observation_id,
+                                       @RequestParam Integer taxon_id,
+                                       @RequestParam String date) {
+
+        Observation observation = observationRepo.findByIdWithDetails(observation_id);
+        Taxon taxon = taxonRepo.findById(taxon_id).orElseThrow();
+
+        User user = userRepo.findByEmail("florita2901@gmail.com");
+        observation.setUser(user);
+
+        Identification newIdentification = new Identification();
+        newIdentification.setObservation(observation);
+        newIdentification.setTaxon(taxon);
+        newIdentification.setUser(user);
+        newIdentification.setDate(LocalDate.parse(date));
+
+        identificationRepo.save(newIdentification);
+
+        return "redirect:/observation_detail/" + observation_id;  // Redirige al detalle de la observación
+    }
+
+    @DeleteMapping("/delete_identification/{id}")
+    @ResponseBody
+    public String deleteIdentification(@PathVariable Integer id) {
+        identificationRepo.deleteById(id);
+        return "ok";
     }
 
     @GetMapping("/my_observations")
@@ -100,7 +179,7 @@ public class HomeController {
         model.addAttribute("observation", obs);
         model.addAttribute("taxon", taxonRepo.findAll());
         model.addAttribute("license", licenseRepo.findAll());
-        return "create";
+        return "create_observation";
     }
 
     @PostMapping("/create")
@@ -118,7 +197,7 @@ public class HomeController {
 
     @DeleteMapping("/delete_observation/{id}")
     @ResponseBody
-    public String delete(@PathVariable Integer id) {
+    public String delete_observation(@PathVariable Integer id) {
         observationRepo.deleteById(id);
         return "ok";
     }
