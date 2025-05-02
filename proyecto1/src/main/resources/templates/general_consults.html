@@ -57,13 +57,76 @@
 <!-- Hero Section (Cabecera) -->
 <section class="hero is-savb is-bold">
   <div class="hero-body">
-    <div class="container has-text-centered">
-      <h1 class="title has-text-white">
-        SAVB CR
-      </h1>
-      <h2 class="subtitle has-text-white">
-        Sistema de Actualización y Visualización de la Biodiversidad en Costa Rica
-      </h2>
+
+    <div class="container is-flex is-justify-content-space-between is-align-items-center">
+      <a href="/taxons_consults" class="button is-white is-rounded ">
+                <span class="icon">
+                    <i class="fas fa-arrow-left" style="color: #48C774FF;"></i>
+                </span>
+        <span style="color: #48C774;">Back</span>
+      </a>
+
+      <!-- Título -->
+      <div class="has-text-centered" style="flex-grow: 1;">
+        <h1 class="title has-text-white">
+          SAVB CR
+        </h1>
+        <h2 class="subtitle has-text-white">
+          Sistema de Actualización y Visualización de la Biodiversidad en Costa Rica
+        </h2>
+      </div>
+      <div style="width: 94px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Contenido Principal -->
+<section class="section">
+  <div class="container">
+    <!-- Cabecera con subtítulos -->
+    <div class="action-header is-flex is-justify-content-space-between">
+            <span class="is-size-2 is-italic has-text-weight-bold has-text-success">
+                General
+            </span>
+      <div class="buttons">
+        <a href="/taxons_consults" class="button is-primary">
+          <span>Taxons</span>
+        </a>
+      </div>
+    </div>
+    <!-- Lista de observaciones (scroll fijo) -->
+    <div class="box scroll-container">
+      <!-- Estado vacío (se muestra cuando no hay observaciones) -->
+      <div class="is-flex is-flex-direction-column is-justify-content-center is-align-items-center has-text-centered"
+           style="height: 100%;" th:if="${#lists.isEmpty(identifications)}">
+    <span class="icon is-large has-text-grey-light">
+        <i class="fas fa-dove fa-3x"></i>
+    </span>
+        <p class="is-size-5 has-text-grey">There's no observations here</p>
+      </div>
+
+      <!-- Lista de observaciones (se muestra cuando hay datos) -->
+      <div th:each="id : ${identifications}" class="observation-item">
+        <div class="is-flex is-justify-content-space-between">
+        </div>
+
+        <!-- Información de la consulta -->
+        <div class="taxon-info">
+          <p>
+            <strong>Nombre común:</strong>
+            <span th:text="${id.commonName}">Reino</span>
+          </p>
+          <p>
+            <strong>Cantidad de identificaciones:</strong>
+            <span th:text="${id.totalIdentifications}"></span>
+          </p>
+          <p>
+            <strong>Identificaciones únicas:</strong>
+            <span th:text="${id.uniqueIdentifiers}"></span>
+          </p>
+        </div>
+
+      </div>
     </div>
   </div>
 </section>
