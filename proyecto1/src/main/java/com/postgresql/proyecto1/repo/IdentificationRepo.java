@@ -12,21 +12,16 @@ public interface IdentificationRepo extends JpaRepository<Identification, Intege
     @Query(value = """
     SELECT t.common_name, COUNT(DISTINCT i.id_identification), COUNT(DISTINCT ui.id_user)
     FROM identification i
-    INNER JOIN observation o 
-    
+    INNER JOIN observation o
     ON i.observation_id = o.id_observation
-            
-    INNER JOIN taxon t 
+    INNER JOIN taxon t
     ON i.taxon_id = t.id_taxon
-    
-    INNER JOIN users ui 
+    INNER JOIN users ui\s
     ON i.user_id = ui.id_user
-            
-    INNER JOIN users uo 
+    INNER JOIN users uo\s
     ON o.user_id = uo.id_user
-    
     GROUP BY t.common_name
     ORDER BY COUNT(DISTINCT i.id_identification) DESC
-    """, nativeQuery = true)
+   """, nativeQuery = true)
     List<Object[]> getConsult();
 }
