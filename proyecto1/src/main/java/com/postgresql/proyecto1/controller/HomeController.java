@@ -1,14 +1,17 @@
 package com.postgresql.proyecto1.controller;
 
+import com.postgresql.proyecto1.dto.IdentificationDTO;
 import com.postgresql.proyecto1.dto.ObservationDTO;
 import com.postgresql.proyecto1.model.*;
 import com.postgresql.proyecto1.repo.*;
+import com.postgresql.proyecto1.service.IdentificationService;
 import com.postgresql.proyecto1.service.TaxonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
+import javax.management.openmbean.CompositeData;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,7 @@ public class HomeController {
     private final TaxonService taxonService;
     private final ImageRepo imageRepo;
     private final IdentificationRepo identificationRepo;
+    private final IdentificationService identificationService;
 
     @GetMapping("/")
     public String home(Model model) {
@@ -39,8 +43,9 @@ public class HomeController {
     }
 
     @GetMapping("/general_consults")
-    public String getGeneralConsultPage(Model model) {
-        model.addAttribute("observations", observationRepo.findAll());
+    public String getGeneralConsultsPage(Model model) {
+        List<IdentificationDTO> identifications = identificationService.getAll();  // Usar la instancia del servicio
+        model.addAttribute("identifications", identifications);
         return "general_consults";
     }
 
