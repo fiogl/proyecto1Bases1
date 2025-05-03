@@ -71,6 +71,7 @@
     <div class="hero-body">
 
         <div class="container is-flex is-justify-content-space-between is-align-items-center">
+            <!-- Botón de atrás -->
             <a href="/" class="button is-white is-rounded ">
                 <span class="icon">
                     <i class="fas fa-arrow-left" style="color: #48C774FF;"></i>
@@ -87,8 +88,10 @@
                     Sistema de Actualización y Visualización de la Biodiversidad en Costa Rica
                 </h2>
             </div>
+
             <div style="width: 94px;"></div>
         </div>
+
     </div>
 </section>
 
@@ -125,7 +128,7 @@
                 <div class="is-flex is-align-items-center is-justify-content-space-between">
                     <div class="is-flex is-align-items-center">
                         <!-- Scientific Name -->
-                        <span class="has-text-weight-bold" th:text="${obs.taxon.scientific_name}"></span>
+                        <span class="has-text-weight-bold" th:text="${obs.taxon.common_name}"></span>
 
                         <!-- Separador -->
                         <span class="mx-2">|</span>

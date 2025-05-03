@@ -108,7 +108,7 @@
                 <a th:href="@{/observation_detail/{id}(id=${obs.id_observation})}" class="is-flex is-align-items-center is-justify-content-space-between" style="color: inherit; text-decoration: none;">
                     <div class="is-flex is-align-items-center">
                         <!-- Scientific Name -->
-                        <span class="has-text-weight-bold" th:text="${obs.taxon.scientific_name}"></span>
+                        <span class="has-text-weight-bold" th:text="${obs.taxon.common_name}"></span>
 
                         <!-- Separador -->
                         <span class="mx-2">|</span>

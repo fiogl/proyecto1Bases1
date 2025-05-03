@@ -68,7 +68,7 @@
         <div class="box pb-6">
             <div class="is-flex is-align-items-center">
                 <div style="width: 50%;">
-                    <p class="title is-3" th:text="${observation.taxon.scientific_name}" style="margin-left: 100px"></p>
+                    <p class="title is-3" th:text="${observation.taxon.common_name}" style="margin-left: 100px"></p>
                     <p class="subtitle is-5" style="margin-left: 100px">Published by: <span th:text="${observation.user.name}"></span></p>
                     <div class="image">
                         <img th:src="${observation.image.url}"
@@ -125,11 +125,14 @@
                         </div>
                         <div class="media-content">
                             <p class="title is-5" th:text="${identification.taxon.scientific_name}"></p>
-                            <p class="subtitle is-6">No sé qué poner aquí</p>
+                            <p class="subtitle is-6" th:text="${identification.taxon.scientific_name}"></p>
                         </div>
                     </div>
                     <!-- Botón de borrado oculto -->
-                    <button class="delete is-small delete-btn " th:data-id="${identification.id_identification}"></button>
+                    <button class="delete is-small delete-btn "
+                            th:data-id="${identification.id_identification}"
+                            disabled>
+                    </button>
                     </div>
                 </div>
             </div>
@@ -359,17 +362,25 @@
 
 <script>
     document.getElementById('toggleDelete').addEventListener('click', () => {
-        document.querySelector('.scroll-container').classList.toggle('delete-mode');
+        const scrollContainer = document.querySelector('.scroll-container');
+        const isDeleteMode = scrollContainer.classList.toggle('delete-mode');
 
+        // Habilita/deshabilita todos los botones de borrado
         document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.onclick = (e) => {
-                e.stopPropagation();
-                const id = btn.getAttribute('data-id');
-                if (confirm('Are you sure you want to delete this observation?')) {
-                    fetch(`/delete_identification/${id}`, { method: 'DELETE' })
-                        .then(() => location.reload());
-                }
-            };
+            btn.disabled = !isDeleteMode; // Se habilita solo en delete mode
+
+            if (isDeleteMode) {
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    const id = btn.getAttribute('data-id');
+                    if (confirm('Are you sure you want to delete this observation?')) {
+                        fetch(`/delete_identification/${id}`, { method: 'DELETE' })
+                            .then(() => location.reload());
+                    }
+                };
+            } else {
+                btn.onclick = null; // Elimina el event listener cuando se desactiva el modo
+            }
         });
     });
 </script>
