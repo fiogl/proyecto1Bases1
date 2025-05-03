@@ -2,6 +2,7 @@ package com.postgresql.proyecto1.controller;
 
 import com.postgresql.proyecto1.dto.IdentificationDTO;
 import com.postgresql.proyecto1.dto.ObservationDTO;
+import com.postgresql.proyecto1.dto.ObservationTaxonomyDTO;
 import com.postgresql.proyecto1.model.*;
 import com.postgresql.proyecto1.repo.*;
 import com.postgresql.proyecto1.service.IdentificationService;
@@ -11,11 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
-import javax.management.openmbean.CompositeData;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -44,9 +43,17 @@ public class HomeController {
 
     @GetMapping("/general_consults")
     public String getGeneralConsultsPage(Model model) {
-        List<IdentificationDTO> identifications = identificationService.getAll();  // Usar la instancia del servicio
+        List<IdentificationDTO> identifications = identificationService.getAll();
         model.addAttribute("identifications", identifications);
         return "general_consults";
+    }
+
+    @GetMapping("/taxonomy_consults")
+    public String getTaxonInfoConsultsPage(Model model) {
+        List<ObservationTaxonomyDTO> observationTaxonomy = taxonService.getTaxonomy();
+        model.addAttribute("observationTaxonomy", observationTaxonomy);
+
+        return "taxonomy_consults";
     }
 
     @GetMapping("/taxons_consults")
@@ -67,22 +74,6 @@ public class HomeController {
         return "taxons_consults";
     }
 
-//    @GetMapping("/taxons_consults/{id}")
-//    public String getTaxon(@PathVariable Integer id, Model model) {
-//        Taxon kingdom = taxonService.findKingdom(id);
-//        boolean isSpecies = taxonService.species(id);
-//
-//        model.addAttribute("kingdom", kingdom);
-//
-//        if (isSpecies) {
-//            Taxon taxon = taxonService.findTaxonById_taxon(id);
-//            model.addAttribute("species", taxon.getScientific_name());
-//        } else {
-//            model.addAttribute("species", "No disponible");
-//        }
-//        return "taxons_consults";
-//    }
-
     @GetMapping("/observation_detail/{id}")
     public String getObservationDetails(@PathVariable Integer id, Model model) {
         Observation observation = observationRepo.findByIdWithDetails(id);
@@ -91,7 +82,6 @@ public class HomeController {
         model.addAttribute("licenses", licenseRepo.findAll());
         return "observation_detail";
     }
-
 
     @PostMapping("/observations/update")
     public String updateObservation(@RequestParam int id,
