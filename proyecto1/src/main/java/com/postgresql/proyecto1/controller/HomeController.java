@@ -154,6 +154,23 @@ public class HomeController {
         return "redirect:/observation_detail/" + observation_id;  // Redirige al detalle de la observación
     }
 
+    @PostMapping("/identifications/update")
+    public String updateIdentification(@RequestParam Integer id_identification,
+                                       @RequestParam Integer taxon_id,
+                                       @RequestParam String date,
+                                       @RequestParam Integer observation_id) {
+
+        Identification identification = identificationRepo.findById(id_identification).orElseThrow();
+        Taxon taxon = taxonRepo.findById(taxon_id).orElseThrow();
+
+        identification.setTaxon(taxon);
+        identification.setDate(LocalDate.parse(date));
+
+        identificationRepo.save(identification);
+
+        return "redirect:/observation_detail/" + observation_id;
+    }
+
     @DeleteMapping("/delete_identification/{id}")
     @ResponseBody
     public String deleteIdentification(@PathVariable Integer id) {

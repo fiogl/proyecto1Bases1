@@ -23,6 +23,16 @@
             opacity: 1;
         }
 
+        .edit-btn {
+            display: none;
+            transition: opacity 0.3s ease;
+            margin-left: 1020px; /* Espacio entre botones */
+        }
+
+        .edit-mode .edit-btn {
+            display: inline-block;
+        }
+
     </style>
 </head>
 <body>
@@ -90,26 +100,34 @@
         </div>
 
         <!-- Actividad -->
+        <!-- Botones-->
         <div class="buttons is-flex is-justify-content-flex-end">
-            <button id="toggleDelete" class="button is-danger">
-                <span class="icon"><i class="fas fa-trash"></i></span>
-                <span>Delete</span>
-            </button>
             <button class="button is-success" onclick="openNewIdentificationModal()">
                 <span class="icon"><i class="fas fa-plus"></i></span>
                 <span>New identification</span>
             </button>
+            <button id="toggleDelete" class="button is-danger">
+                <span class="icon"><i class="fas fa-trash"></i></span>
+                <span>Delete</span>
+            </button>
+            <button class="button is-warning" id="toggleEdit">
+                <span class="icon"><i class="fa-solid fa-pen"></i></span>
+                <span>Edit identification</span>
+            </button>
         </div>
 
+        <!-- Scroll fijo de identificaciones-->
         <div class="box mt-5 scroll-container">
             <h2 class="title is-3 has-text-success">Actividad</h2>
             <div style="max-height: 400px; overflow-y: auto;">
+                <!-- Cuando no hay identificaciones-->
                 <div th:if="${#lists.isEmpty(observation.identifications)}" class="has-text-centered p-6">
             <span class="icon is-large has-text-grey-light">
                 <i class="fas fa-dove fa-3x"></i>
             </span>
                     <p class="mt-3 has-text-grey-light">There's no identifications yet</p>
                 </div>
+                <!-- Cuando sí hay identificaciones-->
                 <div class="box " th:each="identification : ${observation.identifications}" th:unless="${#lists.isEmpty(observation.identifications)}">
                     <p class="has-background-grey-lighter">
                         <span class="ml-3">
@@ -128,10 +146,14 @@
                             <p class="subtitle is-6" th:text="${identification.taxon.scientific_name}"></p>
                         </div>
                     </div>
-                    <!-- Botón de borrado oculto -->
-                    <button class="delete is-small delete-btn "
+                    <!-- Botón de edición y borrado oculto -->
+                    <button class="button is-small is-warning edit-btn"
                             th:data-id="${identification.id_identification}"
-                            disabled>
+                            th:data-taxon="${identification.taxon.id_taxon}" disabled>
+                            <span class="icon"><i class="fas fa-pen"></i></span>
+                    </button>
+                    <button class="delete is-small delete-btn "
+                            th:data-id="${identification.id_identification}" disabled>
                     </button>
                     </div>
                 </div>
@@ -140,71 +162,71 @@
     </div>
 </section>
 
-    <!-- Modal para editar observación -->
-    <div id="editObservationModal" class="modal">
-        <div class="modal-background" onclick="closeModal('editObservationModal')"></div>
-        <div class="modal-card">
-            <header class="modal-card-head">
-                <p class="modal-card-title">Edit Observation</p>
-                <button class="delete" aria-label="close" onclick="closeModal('editObservationModal')"></button>
-            </header>
-            <form th:action="@{/observations/update}" method="post">
-                <section class="modal-card-body">
-                    <div class="field">
-                        <button type="button" class="button is-link" id="openImageModal">
-                            Reupload Image
-                        </button>
+<!-- Modal para editar observación -->
+<div id="editObservationModal" class="modal">
+    <div class="modal-background" onclick="closeModal('editObservationModal')"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Edit Observation</p>
+            <button class="delete" aria-label="close" onclick="closeModal('editObservationModal')"></button>
+        </header>
+        <form th:action="@{/observations/update}" method="post">
+            <section class="modal-card-body">
+                <div class="field">
+                    <button type="button" class="button is-link" id="openImageModal">
+                        Reupload Image
+                    </button>
+                </div>
+                <input type="hidden" name="id" th:value="${observation.id_observation}" />
+                <div class="field">
+                    <label class="label">Taxon</label>
+                    <div class="select is-fullwidth">
+                        <select name="taxon_id" required>
+                            <option th:each="taxa : ${taxon}"
+                                    th:value="${taxa.id_taxon}"
+                                    th:text="${taxa.scientific_name}"
+                                    th:selected="${taxa.id_taxon} == ${observation.taxon.id_taxon}">
+                            </option>
+                        </select>
                     </div>
-                    <input type="hidden" name="id" th:value="${observation.id_observation}" />
-                    <div class="field">
-                        <label class="label">Taxon</label>
-                        <div class="select is-fullwidth">
-                            <select name="taxon_id" required>
-                                <option th:each="taxa : ${taxon}"
-                                        th:value="${taxa.id_taxon}"
-                                        th:text="${taxa.scientific_name}"
-                                        th:selected="${taxa.id_taxon} == ${observation.taxon.id_taxon}">
-                                </option>
-                            </select>
-                        </div>
+                </div>
+                <div class="field">
+                    <label class="label">Date</label>
+                    <div class="control">
+                        <input class="input" type="date" name="date" th:value="${observation.date}" required/>
                     </div>
-                    <div class="field">
-                        <label class="label">Date</label>
-                        <div class="control">
-                            <input class="input" type="date" name="date" th:value="${observation.date}"/>
-                        </div>
+                </div>
+                <div class="field">
+                    <label class="label">Latitude</label>
+                    <div class="control">
+                        <input class="input" type="text" name="latitude" th:value="${observation.latitude}" required/>
                     </div>
-                    <div class="field">
-                        <label class="label">Latitude</label>
-                        <div class="control">
-                            <input class="input" type="text" name="latitude" th:value="${observation.latitude}" />
-                        </div>
+                </div>
+                <div class="field">
+                    <label class="label">Longitude</label>
+                    <div class="control">
+                        <input class="input" type="text" name="longitude" th:value="${observation.longitude}" required/>
                     </div>
-                    <div class="field">
-                        <label class="label">Longitude</label>
-                        <div class="control">
-                            <input class="input" type="text" name="longitude" th:value="${observation.longitude}" />
-                        </div>
+                </div>
+                <div class="field">
+                    <label class="label">Notes</label>
+                    <div class="control">
+                        <textarea class="textarea" name="notes" th:text="${observation.notes}"></textarea>
                     </div>
-                    <div class="field">
-                        <label class="label">Notes</label>
-                        <div class="control">
-                            <textarea class="textarea" name="notes" th:text="${observation.notes}"></textarea>
-                        </div>
-                    </div>
-                    <input type="hidden" name="imageUrl" id="hiddenImageUrl" th:value="${observation.image.url}" />
-                    <input type="hidden" name="imageOwner" id="hiddenImageOwner" th:value="${observation.image.owner}" />
-                    <input type="hidden" name="imageLatitude" id="hiddenImageLatitude" th:value="${observation.image.latitude}" />
-                    <input type="hidden" name="imageLongitude" id="hiddenImageLongitude" th:value="${observation.image.longitude}" />
-                    <input type="hidden" name="imageTaxon" id="hiddenImageTaxon" th:value="${observation.image.taxon.id_taxon}" />
-                    <input type="hidden" name="imageLicense" id="hiddenImageLicense" th:value="${observation.image.license.id_license}" />
-                </section>
-                <footer class="modal-card-foot">
-                    <button type="submit" class="button is-success">Save changes</button>
-                </footer>
-            </form>
-        </div>
+                </div>
+                <input type="hidden" name="imageUrl" id="hiddenImageUrl" th:value="${observation.image.url}" />
+                <input type="hidden" name="imageOwner" id="hiddenImageOwner" th:value="${observation.image.owner}" />
+                <input type="hidden" name="imageLatitude" id="hiddenImageLatitude" th:value="${observation.image.latitude}" />
+                <input type="hidden" name="imageLongitude" id="hiddenImageLongitude" th:value="${observation.image.longitude}" />
+                <input type="hidden" name="imageTaxon" id="hiddenImageTaxon" th:value="${observation.image.taxon.id_taxon}" />
+                <input type="hidden" name="imageLicense" id="hiddenImageLicense" th:value="${observation.image.license.id_license}" />
+            </section>
+            <footer class="modal-card-foot">
+                <button type="submit" class="button is-success">Save changes</button>
+            </footer>
+        </form>
     </div>
+</div>
 
 <!-- Modal para reeditar la info de la imagen -->
 <div class="modal" id="imageModal">
@@ -219,7 +241,7 @@
             <div class="field">
                 <label class="label">Image URL</label>
                 <div class="control">
-                    <input id="modalImageUrl" class="input" type="text" placeholder="https://..." th:value="${observation.image.url}">
+                    <input id="modalImageUrl" class="input" type="text" placeholder="https://..." th:value="${observation.image.url}" required>
                 </div>
             </div>
 
@@ -227,7 +249,7 @@
             <div class="field">
                 <label class="label">Owner</label>
                 <div class="control">
-                    <input id="modalImageOwner" class="input" type="text" placeholder="Ej: Ana Pérez" th:value="${observation.image.owner}">
+                    <input id="modalImageOwner" class="input" type="text" placeholder="Ej: Ana Pérez" th:value="${observation.image.owner}" required>
                 </div>
             </div>
 
@@ -289,42 +311,128 @@
     </div>
 </div>
 
-    <!-- Modal para nueva identificación -->
-    <div id="newIdentificationModal" class="modal">
-        <div class="modal-background" onclick="closeModal('newIdentificationModal')"></div>
-        <div class="modal-card">
-            <header class="modal-card-head">
-                <p class="modal-card-title">New Identification</p>
-                <button class="delete" aria-label="close" onclick="closeModal('newIdentificationModal')"></button>
-            </header>
-            <form th:action="@{/identifications/create}" method="post">
-                <section class="modal-card-body">
-                    <input type="hidden" name="observation_id" th:value="${observation.id_observation}" />
-                    <input type="hidden" name="date" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" />
-                    <div class="field">
-                        <label class="label">Select Taxon</label>
-                        <div class="control">
-                            <div class="select is-fullwidth">
-                                <select name="taxon_id" required>
-                                    <option th:each="taxa : ${taxon}" th:value="${taxa.id_taxon}" th:text="${taxa.scientific_name}"></option>
-                                </select>
-                            </div>
+<!-- Modal para nueva identificación -->
+<div id="newIdentificationModal" class="modal">
+    <div class="modal-background" onclick="closeModal('newIdentificationModal')"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">New Identification</p>
+            <button class="delete" aria-label="close" onclick="closeModal('newIdentificationModal')"></button>
+        </header>
+        <form th:action="@{/identifications/create}" method="post">
+            <section class="modal-card-body">
+                <input type="hidden" name="observation_id" th:value="${observation.id_observation}" />
+                <input type="hidden" name="date" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" />
+                <div class="field">
+                    <label class="label">Select Taxon</label>
+                    <div class="control">
+                        <div class="select is-fullwidth">
+                            <select name="taxon_id" required>
+                                <option th:each="taxa : ${taxon}" th:value="${taxa.id_taxon}" th:text="${taxa.scientific_name}"></option>
+                            </select>
                         </div>
                     </div>
-                </section>
-                <footer class="modal-card-foot">
-                    <button type="submit" class="button is-success">Submit</button>
-                </footer>
-            </form>
-        </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <button type="submit" class="button is-success">Submit</button>
+            </footer>
+        </form>
     </div>
+</div>
 
+<!-- Modal para editar identificación -->
+<div id="editIdentificationModal" class="modal">
+    <div class="modal-background" onclick="closeModal('editIdentificationModal')"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Edit Identification</p>
+            <button class="delete" aria-label="close" onclick="closeModal('editIdentificationModal')"></button>
+        </header>
+        <form th:action="@{/identifications/update}" method="post">
+            <section class="modal-card-body">
+                <!-- Ocultos -->
+                <input type="hidden" name="id_identification" id="editIdentificationId" />
+                <input type="hidden" name="date" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" />
+                <input type="hidden" name="observation_id" th:value="${observation.id_observation}" />
+
+                <!-- Selección de taxón -->
+                <div class="field">
+                    <label class="label">Select Taxon</label>
+                    <div class="control">
+                        <div class="select is-fullwidth">
+                            <select name="taxon_id" id="editTaxonSelect" required>
+                                <option th:each="taxa : ${taxon}"
+                                        th:value="${taxa.id_taxon}"
+                                        th:text="${taxa.scientific_name}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <button type="submit" class="button is-success">Update</button>
+            </footer>
+        </form>
+    </div>
+</div>
+
+<!-- Configuración de modales (edit observation) (reupload image)-->
 <script>
+    // Se obtienen los elementos
     const modal = document.getElementById('imageModal');
     const openModalBtn = document.getElementById('openImageModal');
     const closeModalBtn = document.getElementById('closeImageModal');
     const saveImageDataBtn = document.getElementById('saveImageData');
 
+    // Función para validación
+    function validateFields(modalElement, fields) {
+        let isValid = true;
+
+        fields.forEach(({ id, error }) => {
+            const input = document.getElementById(id) || modalElement.querySelector(`[name="${id}"]`);
+            if (!input) return;
+
+            const errorElement = input.nextElementSibling;
+            const value = input.type === 'select-one' ? input.selectedIndex > 0 : input.value.trim();
+
+            if (!value) {
+                isValid = false;
+                input.classList.add('is-danger');
+
+                if (!errorElement || !errorElement.classList.contains('help')) {
+                    input.insertAdjacentHTML('afterend', `<p class="help is-danger">${error}</p>`);
+                }
+            } else {
+                input.classList.remove('is-danger');
+                if (errorElement && errorElement.classList.contains('help')) {
+                    errorElement.remove();
+                }
+            }
+        });
+
+        if (!isValid) {
+            //Notificación de error imagen
+            const notification = document.createElement('div');
+            notification.className = 'notification is-danger is-light is-small';
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.left = '50%';  // Borde izquierdo en el centro
+            notification.style.transform = 'translateX(-50%)';  // Corrige el centrado
+            notification.style.zIndex = '9999';
+            notification.style.maxWidth = '80%';  // Ancho
+            notification.innerHTML = `❌ Please upload an image.`;
+
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        return isValid;
+    }
+
+
+    // Control del modal de imagen
     openModalBtn.addEventListener('click', () => {
         modal.classList.add('is-active');
     });
@@ -334,18 +442,47 @@
     });
 
     saveImageDataBtn.addEventListener('click', () => {
-        // Copiar datos del modal al formulario principal
-        document.getElementById('hiddenImageUrl').value = document.getElementById('modalImageUrl').value;
-        document.getElementById('hiddenImageOwner').value = document.getElementById('modalImageOwner').value;
-        document.getElementById('hiddenImageLatitude').value = document.getElementById('modalImageLatitude').value;
-        document.getElementById('hiddenImageLongitude').value = document.getElementById('modalImageLongitude').value;
-        document.getElementById('hiddenImageLicense').value = document.getElementById('modalImageLicense').value;
-        document.getElementById('hiddenImageTaxon').value = document.getElementById('modalImageTaxon').value;
+        const requiredFields = [
+            { id: 'modalImageUrl', error: 'Image URL is required' },
+            { id: 'modalImageOwner', error: 'Owner is required' },
+            { id: 'modalImageLatitude', error: 'Latitude is required' },
+            { id: 'modalImageLongitude', error: 'Longitude is required' },
+            { id: 'modalImageTaxon', error: 'Taxon is required' },
+            { id: 'modalImageLicense', error: 'License is required' }
+        ];
 
-        modal.classList.remove('is-active');
+        if (validateFields(modal, requiredFields)) {
+            // Copiar datos a campos ocultos
+            document.getElementById('hiddenImageUrl').value = document.getElementById('modalImageUrl').value;
+            document.getElementById('hiddenImageOwner').value = document.getElementById('modalImageOwner').value;
+            document.getElementById('hiddenImageLatitude').value = document.getElementById('modalImageLatitude').value;
+            document.getElementById('hiddenImageLongitude').value = document.getElementById('modalImageLongitude').value;
+            document.getElementById('hiddenImageTaxon').value = document.getElementById('modalImageTaxon').value;
+            document.getElementById('hiddenImageLicense').value = document.getElementById('modalImageLicense').value;
+
+            modal.classList.remove('is-active');
+        }
+    });
+
+    // Control del modal de editar observaciones
+    document.querySelector('#editObservationModal form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const requiredFields = [
+            { id: 'taxon_id', error: 'Taxon is required' },
+            { id: 'date', error: 'Date is required' },
+            { id: 'latitude', error: 'Latitude is required' },
+            { id: 'longitude', error: 'Longitude is required' },
+            { id: 'hiddenImageUrl', error: 'Image is required' }
+        ];
+
+        if (validateFields(document.getElementById('editObservationModal'), requiredFields)) {
+            this.submit();
+        }
     });
 </script>
 
+<!-- Funciones para abrir y cerrar los modales-->
 <script>
     function openEditObservationModal() {
         document.getElementById('editObservationModal').classList.add('is-active');
@@ -355,11 +492,18 @@
         document.getElementById('newIdentificationModal').classList.add('is-active');
     }
 
+    function openEditIdentificationModal(id, taxonId) {
+        document.getElementById('editIdentificationId').value = id;
+        document.getElementById('editTaxonSelect').value = taxonId;
+        document.getElementById('editIdentificationModal').classList.add('is-active');
+    }
+
     function closeModal(modalId) {
         document.getElementById(modalId).classList.remove('is-active');
     }
 </script>
 
+<!-- Modo eliminación de identificaciones-->
 <script>
     document.getElementById('toggleDelete').addEventListener('click', () => {
         const scrollContainer = document.querySelector('.scroll-container');
@@ -380,6 +524,29 @@
                 };
             } else {
                 btn.onclick = null; // Elimina el event listener cuando se desactiva el modo
+            }
+        });
+    });
+</script>
+
+<!-- Modo edición para las identificaciones-->
+<script>
+    document.getElementById('toggleEdit').addEventListener('click', () => {
+        const scrollContainer = document.querySelector('.scroll-container');
+        const isEditMode = scrollContainer.classList.toggle('edit-mode');
+
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.disabled = !isEditMode;
+
+            if (isEditMode) {
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    const id = btn.getAttribute('data-id');
+                    const taxonId = btn.getAttribute('data-taxon');
+                    openEditIdentificationModal(id, taxonId);
+                };
+            } else {
+                btn.onclick = null;
             }
         });
     });
