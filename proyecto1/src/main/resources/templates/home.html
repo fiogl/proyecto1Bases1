@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SAVB CR</title>
-    <!-- Bulma CSS -->
+
+    <!-- Framework Bulma CSS para diseño responsivo y componentes UI -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+
     <!-- Font Awesome para íconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        /* Estilos personalizados */
+        /* Contenedor con scroll vertical para mostrar observaciones */
         .scroll-container {
             height: 400px;
             max-height: 700px;
@@ -18,9 +21,9 @@
             border-radius: 6px;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
-
         }
 
+        /* Cabecera con título y botones alineados */
         .action-header {
             display: flex;
             justify-content: space-between;
@@ -28,6 +31,7 @@
             margin-bottom: 1.5rem;
         }
 
+        /* Estilo individual de cada observación */
         .observation-item {
             border-left: 3px solid #48c774;
             padding: 0.75rem;
@@ -35,29 +39,25 @@
             transition: all 0.3s ease;
         }
 
+        /* Efecto hover sobre observaciones */
         .observation-item:hover {
             background-color: #f5f5f5;
         }
 
+        /* Fondo personalizado para la cabecera con gradiente */
         .hero.is-savb {
             background: linear-gradient(135deg, #48c774 0%, #257a42 100%);
         }
 
-        .observation-item {
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-left: 3px solid #48c774;
-            transition: all 0.3s ease;
-        }
-
         .observation-item:hover {
             background-color: #f5f5f5;
         }
-
     </style>
 </head>
 <body>
-<!-- Hero Section (Cabecera) -->
+<!-- ============================================= -->
+<!-- SECCIÓN HERO (ENCABEZADO PRINCIPAL) -->
+<!-- ============================================= -->
 <section class="hero is-savb is-bold">
     <div class="hero-body">
         <div class="container has-text-centered">
@@ -71,72 +71,87 @@
     </div>
 </section>
 
-<!-- Contenido Principal -->
+<!-- ============================================= -->
+<!-- SECCIÓN PRINCIPAL DEL CONTENIDO -->
+<!-- ============================================= -->
 <section class="section">
     <div class="container">
-        <!-- Cabecera con botones y subtítulo -->
+
+        <!-- Cabecera con título de sección y botones de navegación -->
         <div class="action-header">
             <span class="is-size-2 is-italic has-text-weight-bold">
-                    Observations
+                Observations
             </span>
             <div class="buttons">
+                <!-- Botón para crear una nueva observación -->
                 <a href="/create" class="button is-primary">
                     <span class="icon"><i class="fas fa-plus"></i></span>
                     <span>Create</span>
                 </a>
+
+                <!-- Botón para ver observaciones del usuario -->
                 <a href="/my_observations" class="button is-primary">
                     <span class="icon"><i class="fa-solid fa-cloud"></i></span>
                     <span>My observations</span>
                 </a>
             </div>
-
         </div>
 
-        <!-- Lista de observaciones (scroll fijo) -->
+
+        <!-- ============================================= -->
+        <!-- SECCIÓN DE OBSERVACIONES RECIENTES -->
+        <!-- ============================================= -->
+        <!-- Contenedor con scroll para listar observaciones -->
         <div class="box scroll-container">
-            <!-- Estado vacío (se muestra cuando no hay observaciones) -->
+
+            <!-- Estado cuando no hay observaciones -->
             <div class="is-flex is-flex-direction-column is-justify-content-center is-align-items-center has-text-centered"
                  style="height: 100%;" th:if="${#lists.isEmpty(observations)}">
-    <span class="icon is-large has-text-grey-light">
-        <i class="fas fa-dove fa-3x"></i>
-    </span>
+                <span class="icon is-large has-text-grey-light">
+                    <i class="fas fa-dove fa-3x"></i>
+                </span>
                 <p class="is-size-5 has-text-grey">There's no observations here</p>
             </div>
 
-            <!-- Lista de observaciones (se muestra cuando hay datos) -->
+            <!-- Iteración sobre la lista de observaciones -->
             <div th:each="obs : ${observations}" class="observation-item box">
-                <a th:href="@{/observation_detail/{id}(id=${obs.id_observation})}" class="is-flex is-align-items-center is-justify-content-space-between" style="color: inherit; text-decoration: none;">
+                <!-- Cada observación es un enlace al detalle -->
+                <a th:href="@{/observation_detail/{id}(id=${obs.id_observation})}"
+                   class="is-flex is-align-items-center is-justify-content-space-between"
+                   style="color: inherit; text-decoration: none;">
+
+                    <!-- Información textual de la observación -->
                     <div class="is-flex is-align-items-center">
-                        <!-- Scientific Name -->
+                        <!-- Nombre común del taxón observado -->
                         <span class="has-text-weight-bold" th:text="${obs.taxon.common_name}"></span>
 
-                        <!-- Separador -->
+                        <!-- Separador visual -->
                         <span class="mx-2">|</span>
 
-                        <!-- Published by User -->
+                        <!-- Nombre del usuario que publicó la observación -->
                         <span class="has-text-grey">
                             Published by:
                             <span th:text="${obs.user.name}"></span>
                         </span>
 
-                        <!-- Separador -->
+                        <!-- Separador visual -->
                         <span class="mx-2">|</span>
                     </div>
 
+                    <!-- Imagen asociada a la observación -->
                     <div class="is-flex is-align-items-center">
-                        <!-- Imagen -->
                         <div class="mr-3">
                             <img th:src="${obs.image.url}"
                                  alt="Observation image"
                                  style="max-width: 180px; height: auto; border-radius: 4px;">
                         </div>
                     </div>
-
                 </a>
             </div>
         </div>
 
-        <!-- Botón de consultas -->
+
+        <!-- Botón para hacer consultas de taxones -->
         <a href="/taxons_consults" class="button is-info is-fullwidth">
             <span class="icon"><i class="fas fa-search"></i></span>
             <span>Make consults</span>

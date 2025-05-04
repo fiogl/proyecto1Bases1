@@ -14,14 +14,4 @@ import java.util.List;
 public class TaxonController {
     @Autowired
     TaxonRepo repo;
-
-//    @PostMapping("/addTaxon")
-//    //Verifica que el antecesor exista o que sea cero para crearlo
-//    public void addTaxon(@RequestBody Taxon taxon) {
-//        if (taxon.getId_ancestor() != 0 && !repo.existsById(taxon.getId_ancestor())) {
-//            throw new IllegalArgumentException("El id_ancestor no existe en la tabla taxon.");
-//        }
-//
-//        repo.save(taxon);
-//    }
 }
