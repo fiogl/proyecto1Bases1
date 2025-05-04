@@ -1,7 +1,6 @@
 package com.postgresql.proyecto1.service;
 
 import com.postgresql.proyecto1.dto.AncestorDTO;
-import com.postgresql.proyecto1.dto.IdentificationDTO;
 import com.postgresql.proyecto1.dto.ObservationTaxonomyDTO;
 import com.postgresql.proyecto1.model.Observation;
 import com.postgresql.proyecto1.model.Taxon;
@@ -9,33 +8,22 @@ import com.postgresql.proyecto1.repo.ObservationRepo;
 import com.postgresql.proyecto1.repo.TaxonRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class TaxonService {
-
+    // Se importa los repositorios necesarios para las funciones
     @Autowired
     private TaxonRepo repo;
     @Autowired
     private ObservationRepo observationRepo;
 
-    //    // Función recursiva para encontrar el reino
-//    public Taxon findKingdom(Taxon taxon) {
-//        if (taxon.getAncestor() == null) {
-//            return taxon;
-//        }
-//        return findKingdom(taxon.getAncestor());
-//    }
-//
-    // Recorre los taxones actuales y encuentra el que se busca
-    public Taxon findTaxonById_taxon(Integer taxonId) {
-        return repo.findTaxonById(taxonId);
-    }
-
+    // Función para obtener la taxonomía de todas las observaciones disponibles
     public List<ObservationTaxonomyDTO> getTaxonomy() {
+        // Se obtiene todas las observaciones
         List<Observation> observations = observationRepo.findAll();
+        // Lista para ir asignando los valores
         List<ObservationTaxonomyDTO> result = new ArrayList<>();
 
         for (Observation observation : observations) {
@@ -51,14 +39,15 @@ public class TaxonService {
 
             result.add(new ObservationTaxonomyDTO(observation.getId_observation(), taxonomia));
         }
-
-        return result;
+        return result; // Se retorna la lista con los valores ya ordenados
     }
 
+    // Llama a la función findKingdom del repositorio de taxón dado el id de un taxón
     public Taxon findKingdom(int taxonId) {
         return repo.findKingdom(taxonId);
     }
 
+    // Llama a la función hasAncestors del repositorio de taxón dado el id de un taxón
     public boolean species(int taxonId) {
         return !repo.hasAncestors(taxonId);
     }

@@ -2,6 +2,7 @@ package com.postgresql.proyecto1.dto;
 
 import lombok.Getter;
 
+// Clase para los datos del ancestro
 public class AncestorDTO {
     private Integer idTaxon;
     private String commonName;
@@ -16,6 +17,7 @@ public class AncestorDTO {
         this.idAncestor = idAncestor;
     }
 
+    // Getters; A veces no detecta bien el lombok por lo que es necesario
     public String getCommonName() {
         return commonName;
     }

@@ -4,15 +4,16 @@ import jakarta.persistence.*;
 import lombok.Data;
 import jakarta.validation.constraints.NotNull;
 
-@Data
-@Entity
-@Table(name = "taxon")
+@Data // Genera automáticamente los métodos getter, setter, etc.
+@Entity // Indica que esta clase es una entidad JPA (representa una tabla en la base de datos)
+@Table(name = "taxon") // Nombre de la tabla
+
 public class Taxon {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id //PK
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //Valor autogenerado
     private int id_taxon;
 
-    @ManyToOne
+    @ManyToOne // Relación muchos a uno con la entidad "Ancestor" (observación *..1 ancestro/taxon/).
     @JoinColumn(name = "id_ancestor")
     private Taxon ancestor;
 

@@ -1,6 +1,5 @@
 package com.postgresql.proyecto1.service;
 
-import com.postgresql.proyecto1.dto.AncestorDTO;
 import com.postgresql.proyecto1.dto.IdentificationDTO;
 import com.postgresql.proyecto1.repo.IdentificationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,15 +8,17 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service // Para identificar que es un servicio.
 public class IdentificationService {
-
+    // Coordina el repositorio con el servicio.
     @Autowired
     private IdentificationRepo repo;
 
     // Obtener la consulta y acomodarla en una lista (por ser nativa tal cual no funcionaria)
     public List<IdentificationDTO> getAll() {
+        // Obtener los resultados en sí.
         List<Object[]> temp = repo.getConsult();
+        // Lista para ir asignando los valores.
         List<IdentificationDTO> result = new ArrayList<>();
 
         for (Object[] row : temp) {
@@ -27,7 +28,7 @@ public class IdentificationService {
 
             result.add(new IdentificationDTO(commonName, totalIdentifications, uniqueIdentifiers));
         }
-        return result;
+        return result; // Se retorna la lista con los valores ya ordenados
     }
 
 }

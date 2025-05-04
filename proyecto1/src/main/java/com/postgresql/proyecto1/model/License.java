@@ -8,13 +8,13 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import jakarta.validation.constraints.NotNull;
 
-@Data
-@Entity
-@Table(name = "license")
+@Data // Genera automáticamente los métodos getter, setter, etc.
+@Entity // Indica que esta clase es una entidad JPA (representa una tabla en la base de datos)
+@Table(name = "license") // Nombre de la tabla
 
 public class License {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id //PK
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //Valor autogenerado
     private int id_license;
 
     @NotNull

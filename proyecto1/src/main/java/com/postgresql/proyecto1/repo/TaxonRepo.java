@@ -1,8 +1,6 @@
 package com.postgresql.proyecto1.repo;
 
-import com.postgresql.proyecto1.dto.AncestorDTO;
 import com.postgresql.proyecto1.model.Taxon;
-import com.sun.jdi.IntegerValue;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,10 +10,8 @@ import java.util.List;
 
 @RepositoryRestResource
 public interface TaxonRepo extends JpaRepository<Taxon, Integer> {
-    // Para buscar si otros taxones decienden del actual
-//    @Query("SELECT t FROM Taxon t WHERE t.ancestor = :ancestor")
-//    List<Taxon> findByAncestor(@Param("ancestor") Taxon ancestor);
 
+    // Consulta para encontrar la taxonomía de un taxón en particular.
     @Query(value = "WITH RECURSIVE antecesores AS (" +
             "    SELECT id_taxon, common_name, scientific_name, id_ancestor" +
             "    FROM taxon" +
@@ -29,9 +25,7 @@ public interface TaxonRepo extends JpaRepository<Taxon, Integer> {
             nativeQuery = true)
     List<Object[]> findTaxonomy(@Param("id") Integer id);
 
-    @Query("SELECT t FROM Taxon t WHERE t.id_taxon = :id")
-    Taxon findTaxonById(@Param("id") Integer id);
-
+    // Consulta para encontrar el reino específico de un taxón.
     @Query(value = "WITH RECURSIVE ancestor AS ( " +
             "    SELECT id_taxon, id_ancestor, scientific_name, common_name FROM taxon WHERE id_taxon = :id " +
             "    UNION ALL " +
@@ -41,6 +35,7 @@ public interface TaxonRepo extends JpaRepository<Taxon, Integer> {
             nativeQuery = true)
     Taxon findKingdom(@Param("id") Integer id);
 
+    // Consulta para verificar si dado un taxón, si otros taxones descienden de el.
     @Query("SELECT COUNT(t) > 0 FROM Taxon t WHERE t.ancestor.id_taxon = :id")
     boolean hasAncestors(@Param("id") Integer id);
 }

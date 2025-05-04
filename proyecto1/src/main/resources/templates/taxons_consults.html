@@ -128,6 +128,7 @@
                         <span th:text="${observationDTO.kingdom.scientific_name}">Reino</span>
                     </p>
                     <p>
+                        <!-- Si el actual es una especie, se muestra el nombre científico, en el caso contrario, se indica que no está disponible -->
                         <strong>Especie:</strong>
                         <span th:text="${observationDTO.isSpecies ? observationDTO.observation.taxon.scientific_name : 'No disponible'}"></span>
                     </p>

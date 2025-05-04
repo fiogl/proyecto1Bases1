@@ -5,27 +5,27 @@ import lombok.Data;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-@Data
-@Entity
-@Table(name = "identification")
+@Data // Genera automáticamente los métodos getter, setter, etc.
+@Entity // Indica que esta clase es una entidad JPA (representa una tabla en la base de datos)
+@Table(name = "identification") // Nombre de la tabla
 
 public class Identification {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id //PK
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //Valor autogenerado
     private int id_identification;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne // Relación muchos a uno con la entidad "User" (identificación *..1 usuario).
     @JoinColumn(name="user_id")
     private User user;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne // Relación muchos a uno con la entidad "Observation" (identificación *..1 observación).
     @JoinColumn(name="observation_id")
     private Observation observation;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne // Relación muchos a uno con la entidad "Taxon" (identificación *..1 taxón).
     @JoinColumn(name="taxon_id")
     private Taxon taxon;
 
